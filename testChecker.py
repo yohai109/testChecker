@@ -1,27 +1,29 @@
 import os
-import shutil
 
-dirOfFiles = raw_input("Please enter the directory with the files:")
-numOfLinesToRead = input("please enter the number of liens to read from the file")
-filesToCheck = os.listdir(dirOfFiles)
 
-filesToCheckNew = []
-for i in filesToCheck:
-	if i.endswith(".py"):
-		filesToCheckNew.append(i)
+def testchecker(dirOfFiles, sol, csvDir):
+	filesToCheck = list(filter(lambda x: x.endswith(".py"), os.listdir(dirOfFiles)))
 
-for i in filesToCheckNew:
-	csvLine = ""
-	with open(i, 'r') as currFile:
-		fileData = currFile.readlines(int(numOfLinesToRead))
+	# filesToCheckNew = []
+	# for i in filesToCheck:
+	# 	if i.endswith(".py"):
+	# 		filesToCheckNew.append(i)
 
-	fileLines = fileData
+	for i in filesToCheck:
+		csvLine = []
+		with open(i, 'r') as currFile:
+			fileData = currFile.readlines(len(sol) + 2)
 
-	for currLine in fileLines:
-		if currLine[0] == "#":
-			csvLine += currLine.split(" ")[-1] + ","
+		fileLines = fileData
 
-	csvLine = csvLine[0:-2]
+		for currLine in fileLines:
+			if currLine[0] == "#":
+				csvLine.append(currLine.split(" ")[-1])
 
-	with open(".\\solutions.csv", 'w') as csvFile:
-		csvFile.write(csvLine)
+		finalcsvline = [csvLine[0], csvLine[1]]
+		for currsol, currans in sol, csvLine.split(",")[2:-1]:
+			finalcsvline.append("true" if currsol == currans else "false")
+
+		with open(csvDir, 'a') as csvFile:
+			csvFile.writelines(",".join(finalcsvline))
+
