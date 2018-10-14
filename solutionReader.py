@@ -10,6 +10,6 @@ def solution_reader(solution_file_dir):
 	sol_list = []
 	for i in filedata:
 		if i.startswith("#"):
-			sol_list.append(i.split(" ")[-1])
+			sol_list.append(i.split(" ")[-1].replace("\n", ""))
 
 	return sol_list
